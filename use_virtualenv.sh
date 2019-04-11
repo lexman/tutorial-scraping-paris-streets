@@ -9,5 +9,6 @@ if ! [ -e "${GITHUB_WORKSPACE}/${VENV_NAME}" ]; then
 fi
 
 source "${GITHUB_WORKSPACE}/${VENV_NAME}/bin/activate"
+echo "Using virtualenv ${VENV_NAME}"
 
 sh -c "$*"
