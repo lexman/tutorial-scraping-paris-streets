@@ -7,7 +7,7 @@ LABEL "com.github.actions.description"="Wraps the Python CLI to enable common py
 LABEL "com.github.actions.icon"="package"
 LABEL "com.github.actions.color"="blue"
 
-COPY use_virtualenv.sh /
+COPY use_virtualenv.sh /use_virtualenv.sh
 
 ENTRYPOINT [ "/use_virtualenv.sh" ]
 CMD [ "--help" ]
