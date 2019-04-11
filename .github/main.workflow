@@ -1,6 +1,6 @@
 workflow "Create datapackage" {
   on = "push"
-  resolves = [""]
+  resolves = ["Run scrapper"]
 }
 
 action "Install Scrapper" {
