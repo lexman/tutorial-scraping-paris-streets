@@ -4,7 +4,7 @@ workflow "Create datapackage" {
 }
 
 action "Install Scrapper" {
-  uses = "lexman/tutorial-scraping-paris-streets@master"
+  uses = "./"
   args = "pip install -r requirements.txt"
 }
 
