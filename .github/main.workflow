@@ -14,7 +14,7 @@ workflow "Run every day" {
 }
 
 action "Run scrapper" {
-  uses = "lexman/tutorial-scraping-paris-streets@master"
+  uses = "./"
   needs = ["Install Scrapper"]
   args = "python scrapper.py"
 }
