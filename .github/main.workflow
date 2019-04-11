@@ -1,6 +1,6 @@
 workflow "Create datapackage" {
   on = "push"
-  resolves = ["GitHub Action for Python"]
+  resolves = ["GitHub Action for Python-2"]
 }
 
 action "Install Scrapper" {
