@@ -5,7 +5,7 @@ workflow "Create datapackage" {
 
 action "Install Scrapper" {
   uses = "docker://python:3.7-stretch"
-  runs = "pip install -r requirements.txt"
+  args = "pip install -r requirements.txt"
 }
 
 workflow "Run every day" {
@@ -22,5 +22,5 @@ action "docker://python:3.7-strech" {
 action "Run scrapper" {
   uses = "docker://python:3.7-stretch"
   needs = ["Install Scrapper"]
-  runs = "python scrapper.py"
+  args = "python scrapper.py"
 }
