@@ -1,6 +1,6 @@
 workflow "Create datapackage" {
   on = "push"
-  resolves = ["GitHub Action for Python-2"]
+  resolves = ["GitHub Action for Python-4"]
 }
 
 action "Install Scrapper" {
@@ -10,7 +10,7 @@ action "Install Scrapper" {
 
 workflow "Run every day" {
   on = "schedule(0 0 * * *)"
-  resolves = ["GitHub Action for Python-2"]
+  resolves = ["GitHub Action for Python-3"]
 }
 
 action "Run scrapper" {
@@ -42,5 +42,17 @@ action "GitHub Action for Python-2" {
   uses = "./"
   needs = ["GitHub Action for Python-1"]
   runs = "git commit -m 'Changes in data'"
+  secrets = ["GITHUB_TOKEN"]
+}
+
+action "GitHub Action for Python-3" {
+  uses = "./"
+  needs = ["GitHub Action for Python-2"]
+}
+
+action "GitHub Action for Python-4" {
+  uses = "./"
+  needs = ["GitHub Action for Python-2"]
+  runs = "git push"
   secrets = ["GITHUB_TOKEN"]
 }
