@@ -5,10 +5,16 @@ workflow "Create datapackage" {
 
 action "scrapper" {
   uses = "docker://python:3.7-stretch"
-  runs = "python scrapper.py"
+  runs = "pip install -r requirements.txt"
 }
 
 workflow "New workflow" {
   on = "schedule(0 0 * * *)"
-  resolves = ["scrapper"]
+  resolves = ["docker://python:3.7-strech"]
+}
+
+action "docker://python:3.7-strech" {
+  uses = "docker://python:3.7-strech"
+  needs = ["scrapper"]
+  runs = "python scrapper.py"
 }
