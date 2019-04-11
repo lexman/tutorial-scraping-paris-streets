@@ -1,6 +1,6 @@
 workflow "Create datapackage" {
-  resolves = ["Install Scrapper"]
   on = "push"
+  resolves = ["Run scrapper"]
 }
 
 action "Install Scrapper" {
@@ -15,6 +15,12 @@ workflow "Run every day" {
 
 action "docker://python:3.7-strech" {
   uses = "docker://python:3.7-strech"
+  needs = ["Install Scrapper"]
+  runs = "python scrapper.py"
+}
+
+action "Run scrapper" {
+  uses = "docker://python:3.7-stretch"
   needs = ["Install Scrapper"]
   runs = "python scrapper.py"
 }
