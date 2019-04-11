@@ -1,6 +1,6 @@
 workflow "Create datapackage" {
   on = "push"
-  resolves = ["./"]
+  resolves = ["GitHub Action for Python"]
 }
 
 action "Install Scrapper" {
@@ -23,5 +23,11 @@ action "./" {
   uses = "./"
   needs = ["Run scrapper"]
   secrets = ["GITHUB_TOKEN"]
-  runs = "ls -lisah ; git status"
+  runs = "ls -lisah "
+}
+
+action "GitHub Action for Python" {
+  uses = "./"
+  needs = ["./"]
+  runs = "git status"
 }
