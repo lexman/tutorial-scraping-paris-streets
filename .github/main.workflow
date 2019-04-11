@@ -10,7 +10,7 @@ action "Install Scrapper" {
 
 workflow "Run every day" {
   on = "schedule(0 0 * * *)"
-  resolves = ["Run scrapper"]
+  resolves = ["GitHub Action for Python-2"]
 }
 
 action "Run scrapper" {
@@ -30,4 +30,17 @@ action "GitHub Action for Python" {
   uses = "./"
   needs = ["./"]
   runs = "git status"
+}
+
+action "GitHub Action for Python-1" {
+  uses = "./"
+  needs = ["Run scrapper"]
+  runs = "git add paris_streets.csv"
+}
+
+action "GitHub Action for Python-2" {
+  uses = "./"
+  needs = ["GitHub Action for Python-1"]
+  runs = "git commit -m \"Changes in data\""
+  secrets = ["GITHUB_TOKEN"]
 }
