@@ -41,6 +41,6 @@ action "GitHub Action for Python-1" {
 action "GitHub Action for Python-2" {
   uses = "./"
   needs = ["GitHub Action for Python-1"]
-  runs = "git commit -m \\\"Changes in data|\\\""
+  runs = "git commit -m 'Changes in data'"
   secrets = ["GITHUB_TOKEN"]
 }
