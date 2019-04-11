@@ -1,3 +1,5 @@
+#!/bin/bash
+
 git config --global user.email "githubpublishbot@lexman.org"
 git config --global user.name "Publish bot"
   
