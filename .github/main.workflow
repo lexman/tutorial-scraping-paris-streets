@@ -4,8 +4,8 @@ workflow "Create datapackage" {
 }
 
 action "Install Scrapper" {
-  uses = "docker://python:3.7-stretch"
-  runs = "pip install -r requirements.txt"
+  uses = "./"
+  args = "pip install -r requirements.txt"
 }
 
 workflow "Run every day" {
@@ -14,13 +14,13 @@ workflow "Run every day" {
 }
 
 action "Run scrapper" {
-  uses = "docker://python:3.7-stretch"
+  uses = "./"
   needs = ["Install Scrapper"]
-  runs = "python scrapper.py"
+  args = "python scrapper.py"
 }
 
 action "Publish" {
-  uses = "docker://python:3.7-stretch"
+  uses = "./"
   needs = ["Run scrapper"]
   runs = "./publish.sh"
   secrets = ["GITHUB_TOKEN"]
