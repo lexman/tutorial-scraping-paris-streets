@@ -4,8 +4,8 @@ workflow "Create datapackage" {
 }
 
 action "Install Scrapper" {
-  uses = "./"
-  args = "pip install -r requirements.txt"
+  uses = "./action virtualenv"
+  args = "pip install -r src/requirements.txt"
 }
 
 workflow "Run every day" {
@@ -14,14 +14,14 @@ workflow "Run every day" {
 }
 
 action "Run scrapper" {
-  uses = "./"
+  uses = "./action virtualenv"
   needs = ["Install Scrapper"]
-  args = "python scrapper.py"
+  args = "python src/scrapper.py"
 }
 
 action "Publish" {
-  uses = "./"
+  uses = "./action virtualenv"
   needs = ["Run scrapper"]
-  runs = "./publish.sh"
+  runs = "src/publish.sh"
   secrets = ["GITHUB_TOKEN"]
 }
