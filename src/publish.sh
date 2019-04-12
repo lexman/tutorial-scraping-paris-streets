@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -eu
+set -eux
 
 git config --global user.email "githubpublishbot@lexman.org"
 git config --global user.name "Publish bot"
