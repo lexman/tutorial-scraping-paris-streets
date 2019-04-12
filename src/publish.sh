@@ -1,8 +1,8 @@
 #!/bin/bash
 
+set -eu
+
 git config --global user.email "githubpublishbot@lexman.org"
 git config --global user.name "Publish bot"
   
-git add paris_streets.csv
-git commit -m 'Changes in data'
-git push --set-upstream origin $GITHUB_REF
+git add paris_streets.csv && git commit -m 'Data has changed' && git push origin $GITHUB_REF
