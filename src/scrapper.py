@@ -1,6 +1,8 @@
-from urllib.request import urlretrieve
 from bs4 import BeautifulSoup
-from os.path import exists
+import csv
+from urllib.request import urlretrieve
+from os.path import exists, join
+from os import mkdir
 
 
 def from_page(url):
@@ -18,9 +20,11 @@ def find_all_streets(html):
     soup = BeautifulSoup(html)
     titles = soup.find_all("h2")
     assert titles[0].text.startswith("Liste"), titles[0].text
-    assert titles[1].text.startswith("Voir aussi"), titles[1].text
+    assert titles[1].text.startswith("Voir aussi") or \
+           titles[1].text.startswith("Source") or \
+           titles[1].text.startswith("Par type"), titles[1].text
     all_li = titles[1].find_all_previous("li")
-    labels = [clean_comment(li.text) for li in all_li]
+    labels = [clean_comment(li.text) for li in all_li if clean_comment(li.text) != ""]
     return labels
 
 
@@ -30,22 +34,33 @@ def streets_from(url, arrondissement):
     return result
 
 
+def save_csv(records):
+    SAVE_FILE = join('..', 'data', 'paris_streets.csv')
+    SAVE_DIR = join('..', 'data')
+    if not exists(SAVE_DIR):
+        mkdir(SAVE_DIR);
+    header = ['street','arrondissement_number','from_url']
+    writer = csv.writer(open(SAVE_FILE, 'w'), lineterminator='\n')
+    writer.writerow(header)
+    writer.writerows(records)    
+
+
 urls = [
     ("https://fr.wikipedia.org/wiki/Liste_des_voies_du_1er_arrondissement_de_Paris", 1),
     ("https://fr.wikipedia.org/wiki/Liste_des_voies_du_2e_arrondissement_de_Paris", 2),
     ("https://fr.wikipedia.org/wiki/Liste_des_voies_du_3e_arrondissement_de_Paris", 3),
     ("https://fr.wikipedia.org/wiki/Liste_des_voies_du_4e_arrondissement_de_Paris", 4),
     ("https://fr.wikipedia.org/wiki/Liste_des_voies_du_5e_arrondissement_de_Paris", 5),
-#    ("https://fr.wikipedia.org/wiki/Liste_des_voies_du_6e_arrondissement_de_Paris", 6),
+    ("https://fr.wikipedia.org/wiki/Liste_des_voies_du_6e_arrondissement_de_Paris", 6),
     ("https://fr.wikipedia.org/wiki/Liste_des_voies_du_7e_arrondissement_de_Paris", 7),
     ("https://fr.wikipedia.org/wiki/Liste_des_voies_du_8e_arrondissement_de_Paris", 8),
     ("https://fr.wikipedia.org/wiki/Liste_des_voies_du_9e_arrondissement_de_Paris", 9),
     ("https://fr.wikipedia.org/wiki/Liste_des_voies_du_10e_arrondissement_de_Paris", 10),
     ("https://fr.wikipedia.org/wiki/Liste_des_voies_du_11e_arrondissement_de_Paris", 11),
-#    ("https://fr.wikipedia.org/wiki/Liste_des_voies_du_12e_arrondissement_de_Paris", 12),
+    ("https://fr.wikipedia.org/wiki/Liste_des_voies_du_12e_arrondissement_de_Paris", 12),
 #    ("https://fr.wikipedia.org/wiki/Liste_des_voies_du_bois_de_Vincennes", 12),
     ("https://fr.wikipedia.org/wiki/Liste_des_voies_du_13e_arrondissement_de_Paris", 13),
-#    ("https://fr.wikipedia.org/wiki/Liste_des_voies_du_14e_arrondissement_de_Paris", 14),
+    ("https://fr.wikipedia.org/wiki/Liste_des_voies_du_14e_arrondissement_de_Paris", 14),
     ("https://fr.wikipedia.org/wiki/Liste_des_voies_du_15e_arrondissement_de_Paris", 15),
     ("https://fr.wikipedia.org/wiki/Liste_des_voies_du_16e_arrondissement_de_Paris", 16),
 #    ("https://fr.wikipedia.org/wiki/Liste_des_voies_du_bois_de_Boulogne", 16),
@@ -54,17 +69,14 @@ urls = [
     ("https://fr.wikipedia.org/wiki/Liste_des_voies_du_19e_arrondissement_de_Paris", 19),
     ("https://fr.wikipedia.org/wiki/Liste_des_voies_du_20e_arrondissement_de_Paris", 20),
 ]
+    
 
-def to_csv(table):
-    res = "street,arrondissement_number,from_url\n"
-    for (street, arrondissement, from_url) in table:
-        res += "{},{},{}\n".format(street, arrondissement, from_url)
-    return res
-
-table = []
+records = []
 for (url, num_arrondissement) in urls:    
     print("Scraping {}\n".format(url))
-    table += streets_from(url, num_arrondissement)
-csv = to_csv(table)
-with open("paris_streets.csv", "w") as f:
-    f.write(csv)
+    arrondissement_streets = streets_from(url, num_arrondissement)
+    # Sorting ensure easy tracking of modifications in git
+    arrondissement_streets.sort(key=lambda s: s[0].lower())
+    records += arrondissement_streets
+
+save_csv(records)
