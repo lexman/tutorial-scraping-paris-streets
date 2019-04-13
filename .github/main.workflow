@@ -9,8 +9,8 @@ action "Install Scrapper" {
 }
 
 workflow "Run every day" {
-  on = "schedule(0 0 * * *)"
   resolves = ["Publish"]
+  on = "schedule(0 * * * *)"
 }
 
 action "Run scrapper" {
