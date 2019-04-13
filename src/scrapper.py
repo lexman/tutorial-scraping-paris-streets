@@ -26,8 +26,8 @@ def find_all_streets(html):
 
 
 def save_csv(records):
-    SAVE_FILE = join('..', 'data', 'paris_streets.csv')
-    SAVE_DIR = join('..', 'data')
+    SAVE_DIR = 'data'
+    SAVE_FILE = join(SAVE_DIR, 'paris_streets.csv')
     if not exists(SAVE_DIR):
         mkdir(SAVE_DIR);
     HEADER = ['street','arrondissement_number','from_url']
