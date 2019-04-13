@@ -1,15 +1,12 @@
 from bs4 import BeautifulSoup
 import csv
-from urllib.request import urlretrieve
+from urllib.request import urlopen
 from os.path import exists, join
 from os import mkdir
 
 
-def from_page(url):
-    filename = url.split("/")[-1]
-    if not exists(filename):
-        urlretrieve(url, filename) 
-    return open(filename).read()
+def read_page(url):
+    return urlopen(url).read()
 
 
 def clean_comment(name_with_parenthesis):
@@ -28,24 +25,18 @@ def find_all_streets(html):
     return labels
 
 
-def streets_from(url, arrondissement):
-    html = from_page(url)
-    result = [(street, arrondissement, url) for street in find_all_streets(html)]
-    return result
-
-
 def save_csv(records):
     SAVE_FILE = join('..', 'data', 'paris_streets.csv')
     SAVE_DIR = join('..', 'data')
     if not exists(SAVE_DIR):
         mkdir(SAVE_DIR);
-    header = ['street','arrondissement_number','from_url']
+    HEADER = ['street','arrondissement_number','from_url']
     writer = csv.writer(open(SAVE_FILE, 'w'), lineterminator='\n')
-    writer.writerow(header)
+    writer.writerow(HEADER)
     writer.writerows(records)    
 
 
-urls = [
+URLS = [
     ("https://fr.wikipedia.org/wiki/Liste_des_voies_du_1er_arrondissement_de_Paris", 1),
     ("https://fr.wikipedia.org/wiki/Liste_des_voies_du_2e_arrondissement_de_Paris", 2),
     ("https://fr.wikipedia.org/wiki/Liste_des_voies_du_3e_arrondissement_de_Paris", 3),
@@ -72,11 +63,12 @@ urls = [
     
 
 records = []
-for (url, num_arrondissement) in urls:    
+for (url, num_arrondissement) in URLS:    
     print("Scraping {}\n".format(url))
-    arrondissement_streets = streets_from(url, num_arrondissement)
+    html = read_page(url)
+    arrondissement_records = [(street, num_arrondissement, url) for street in find_all_streets(html)]
     # Sorting ensure easy tracking of modifications in git
-    arrondissement_streets.sort(key=lambda s: s[0].lower())
-    records += arrondissement_streets
+    arrondissement_records.sort(key=lambda s: s[0].lower())
+    records += arrondissement_records
 
 save_csv(records)
