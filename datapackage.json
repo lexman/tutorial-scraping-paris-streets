@@ -1,0 +1,33 @@
+{
+  "name": "paris-streets",
+  "title": "All the streets of Paris, and their arrondissement",
+  "version": "0.1.0",
+  "license": "PDDL-1.0",
+  "resources": [
+    {
+      "name": "paris-streets",
+      "path": "data/paris-streets.csv",
+      "format": "csv",
+      "mediatype": "text/csv",
+      "schema": {
+        "fields": [
+          {
+            "name": "street",
+            "description": "Name of the street",
+            "type": "string"
+          },
+          {
+            "name": "arrondissement",
+            "description": "Number of the 'arrondissement' (administrative subdivision of Paris). There are numbered from 1 to 20. See https://en.wikipedia.org/wiki/Arrondissements_of_Paris",
+            "type": "integer"
+          },
+          {
+            "name": "from_url",
+            "description": "Url of the web page that states this street exists",
+            "type": "string"
+          }
+        ]
+      }
+    }
+  ]
+}

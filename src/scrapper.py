@@ -27,10 +27,10 @@ def find_all_streets(html):
 
 def save_csv(records):
     SAVE_DIR = 'data'
-    SAVE_FILE = join(SAVE_DIR, 'paris_streets.csv')
+    SAVE_FILE = join(SAVE_DIR, 'paris-streets.csv')
     if not exists(SAVE_DIR):
         mkdir(SAVE_DIR);
-    HEADER = ['street','arrondissement_number','from_url']
+    HEADER = ['street','arrondissement','from_url']
     writer = csv.writer(open(SAVE_FILE, 'w'), lineterminator='\n')
     writer.writerow(HEADER)
     writer.writerows(records)    
