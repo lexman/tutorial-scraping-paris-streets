@@ -3,6 +3,8 @@ import csv
 from urllib.request import urlopen
 from os.path import exists, join
 from os import mkdir
+from itertools import groupby
+from operator import itemgetter
 
 
 def read_page(url):
@@ -24,6 +26,14 @@ def find_all_streets(html):
     labels = [clean_comment(li.text) for li in all_li if clean_comment(li.text) != ""]
     return labels
 
+
+# From https://docs.python.org/3/library/itertools.html#itertools-recipes
+def unique_justseen(iterable, key=None):
+    "List unique elements, preserving order. Remember only the element just seen."
+    # unique_justseen('AAAABBBCCDAABBB') --> A B C D A B
+    # unique_justseen('ABBCcAD', str.lower) --> A B C A D
+    return map(next, map(itemgetter(1), groupby(iterable, key)))
+    
 
 def save_csv(records):
     SAVE_DIR = 'data'
@@ -69,6 +79,6 @@ for (url, num_arrondissement) in URLS:
     arrondissement_records = [(street, num_arrondissement, url) for street in find_all_streets(html)]
     # Sorting ensure easy tracking of modifications in git
     arrondissement_records.sort(key=lambda s: s[0].lower())
-    records += arrondissement_records
+    records += unique_justseen(arrondissement_records)
 
 save_csv(records)
