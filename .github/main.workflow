@@ -27,7 +27,7 @@ action "Check data" {
 
 action "Publish" {
   uses = "./action-virtualenv"
-  needs = ["Check scrapper"]
+  needs = ["Check data"]
   runs = "src/publish.sh"
   secrets = ["GITHUB_TOKEN"]
 }
