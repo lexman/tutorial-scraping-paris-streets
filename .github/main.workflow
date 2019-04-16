@@ -19,9 +19,15 @@ action "Run scrapper" {
   args = "python src/scrapper.py"
 }
 
+action "Check data" {
+  uses = "./action-virtualenv"
+  needs = ["Run Scrapper"]
+  args = "goodtables datapackage.json"
+}
+
 action "Publish" {
   uses = "./action-virtualenv"
-  needs = ["Run scrapper"]
+  needs = ["Check scrapper"]
   runs = "src/publish.sh"
   secrets = ["GITHUB_TOKEN"]
 }
