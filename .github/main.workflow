@@ -3,17 +3,17 @@ workflow "Create datapackage" {
   resolves = ["Publish"]
 }
 
-action "Install Scrapper" {
-  uses = "./action-virtualenv"
-  args = "pip install -r src/requirements.txt"
-}
-
 workflow "Run every day" {
   resolves = ["Publish"]
   on = "schedule(0 * * * *)"
 }
 
-action "Run scrapper" {
+action "Install Scrapper" {
+  uses = "./action-virtualenv"
+  args = "pip install -r src/requirements.txt"
+}
+
+action "Run Scrapper" {
   uses = "./action-virtualenv"
   needs = ["Install Scrapper"]
   args = "python src/scrapper.py"
