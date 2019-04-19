@@ -23,7 +23,7 @@
           },
           {
             "name": "from_url",
-            "description": "Url of the web page that states this street exists",
+            "description": "Url of the web page that list this street",
             "type": "string"
           }
         ]
